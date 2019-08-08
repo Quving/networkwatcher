@@ -10,7 +10,7 @@ def get_packageloss(input):
 
 
 def get_responsetime(input):
-    responsetime = -1
+    responsetime = -20
     for x in input.split('\n'):
         if x.find('round-trip min/avg/max/stddev') != -1:
             responsetime = float(x.split('=')[1].split('/')[1])

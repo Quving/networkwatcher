@@ -17,13 +17,7 @@ def get_values():
     return [[packageloss, reponsetime], np.array(time)]
 
 
-if __name__ == '__main__':
-    vals = get_values()
-    time = vals[1]
-
-    dates = [datetime.datetime.fromtimestamp(ts) for ts in vals[1]]
-    datenums = md.date2num(dates)
-
+def plot(x, y1, y2):
     plt.title('Beehive Network Monitor')
 
     plot1 = plt.subplot(211)
@@ -33,13 +27,13 @@ if __name__ == '__main__':
     xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
     ax.xaxis.set_major_formatter(xfmt)
     plt.ylabel('Package Loss (%)')
-    plt.plot(datenums, vals[0][0], '.-')
+    plt.plot(x, y1, '.-')
 
     plot2 = plt.subplot(212)
     ax = plt.gca()
     ax.xaxis.set_major_formatter(xfmt)
     plt.xticks(rotation=90)
-    plot2.plot(datenums, vals[0][1], '.-')
+    plot2.plot(x, y2, '.-')
     plt.ylabel('Response Time (ms)')
     plt.xlabel('timestamp')
     plot1.set_xticklabels([])
@@ -47,3 +41,12 @@ if __name__ == '__main__':
 
     plt.autoscale()
     plt.show()
+
+
+if __name__ == '__main__':
+    vals = get_values()
+    time = vals[1]
+
+    dates = [datetime.datetime.fromtimestamp(ts) for ts in vals[1]]
+    datenums = md.date2num(dates)
+    plot(x=datenums, y1=vals[0][0], y2=vals[0][1])
