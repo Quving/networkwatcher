@@ -1,12 +1,13 @@
 import datetime
-
+import sys
 import matplotlib.dates as md
 import matplotlib.pyplot as plt
 import numpy as np
 
 
 def get_values():
-    with open("notes.txt", 'r') as file:
+    filename =  sys.argv[1]
+    with open(filename, 'r') as file:
         data = file.read()
 
     data = [[float(y) for y in x.split()] for x in data.split('\n') if x]
