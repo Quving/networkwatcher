@@ -1,7 +1,7 @@
 import subprocess
 import time
 from subprocess import PIPE
-
+from sys import platform
 
 def get_packageloss(input):
     packetloss = float(
@@ -12,8 +12,14 @@ def get_packageloss(input):
 def get_responsetime(input):
     responsetime = -20
     for x in input.split('\n'):
-        if x.find('round-trip min/avg/max/stddev') != -1:
-            responsetime = float(x.split('=')[1].split('/')[1])
+        if platform == 'linux':
+            if x.find('rtt min/avg/max/mdev') != -1:
+                responsetime = float(x.split('=')[1].split('/')[1])
+        elif platform == 'darwin':
+            if x.find('round-trip min/avg/max/stddev') != -1:
+                responsetime = float(x.split('=')[1].split('/')[1])
+        else:
+            reponsetime = -20
     return responsetime
 
 
