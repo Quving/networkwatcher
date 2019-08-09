@@ -17,12 +17,11 @@ def get_values():
     return [[packageloss, reponsetime], np.array(time)]
 
 
-def plot(x, y1, y2):
-    plt.title('Beehive Network Monitor')
-
+def plot(x, y1, y2, title):
     plot1 = plt.subplot(211)
+    plt.title(title)
     # plt.subplots_adjust(bottom=0.5)
-    plt.xticks(rotation=90)
+    # plt.xticks(rotation=90)
     ax = plt.gca()
     xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
     ax.xaxis.set_major_formatter(xfmt)
@@ -49,4 +48,7 @@ if __name__ == '__main__':
 
     dates = [datetime.datetime.fromtimestamp(ts) for ts in vals[1]]
     datenums = md.date2num(dates)
-    plot(x=datenums, y1=vals[0][0], y2=vals[0][1])
+    first_date = datetime.datetime.fromtimestamp(time[0])
+    last_date = datetime.datetime.fromtimestamp(time[-1:])
+    plot(x=datenums, y1=vals[0][0], y2=vals[0][1],
+         title='Beehive Network\nFrom {}     to     {}'.format(first_date, last_date))
