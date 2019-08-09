@@ -20,7 +20,7 @@ def get_responsetime(input):
             if x.find('round-trip min/avg/max/stddev') != -1:
                 responsetime = float(x.split('=')[1].split('/')[1])
         else:
-            reponsetime = -20
+            responsetime = -20
     return responsetime
 
 
