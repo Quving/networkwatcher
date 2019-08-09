@@ -2,6 +2,7 @@ import subprocess
 import time
 from subprocess import PIPE
 from sys import platform
+import datetime
 
 def get_packageloss(input):
     packetloss = float(
@@ -24,7 +25,8 @@ def get_responsetime(input):
 
 
 def note_to_file(input):
-    with open('notes.txt', 'a+') as file:
+    filename=datetime.datetime.now().strftime("record_%Y-%m-%d.txt")
+    with open(filename, 'a+') as file:
         file.write(input)
 
 
