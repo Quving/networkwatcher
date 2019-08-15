@@ -23,14 +23,13 @@ def get_values():
 
 if __name__ == '__main__':
     df = pd.DataFrame(data=get_values())
-    if __name__ == '__main__':
-        chart_rt = alt.Chart(df, width=1000, height=500).mark_line().encode(
-            x='timestamp:T',
-            y='responsetime:Q',
-            tooltip=['timestamp:T']
-        ).properties(
-            title=""
-        ).interactive()
+    chart_rt = alt.Chart(df, width=1000, height=500).mark_line().encode(
+        x='timestamp:T',
+        y='responsetime:Q',
+        tooltip=['timestamp:T']
+    ).properties(
+        title=""
+    ).interactive()
 
     chart_pl = alt.Chart(df, width=1000, height=500).mark_line().encode(
         x='timestamp:T',
