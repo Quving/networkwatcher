@@ -1,55 +1,43 @@
-import datetime
+import os
 import sys
-import matplotlib.dates as md
-import matplotlib.pyplot as plt
+from datetime import datetime
+
+import altair as alt
 import numpy as np
+import pandas as pd
 
 
 def get_values():
-    filename =  sys.argv[1]
+    filename = sys.argv[1]
     with open(filename, 'r') as file:
         data = file.read()
 
     data = [[float(y) for y in x.split()] for x in data.split('\n') if x]
 
     # print([list(t) for t in zip(*data)])
-    packageloss, reponsetime, time = zip(*data)
-
-    return [[packageloss, reponsetime], np.array(time)]
-
-
-def plot(x, y1, y2, title):
-    plot1 = plt.subplot(211)
-    plt.title(title)
-    # plt.subplots_adjust(bottom=0.5)
-    # plt.xticks(rotation=90)
-    ax = plt.gca()
-    xfmt = md.DateFormatter('%Y-%m-%d %H:%M:%S')
-    ax.xaxis.set_major_formatter(xfmt)
-    plt.ylabel('Package Loss (%)')
-    plt.plot(x, y1, '.-')
-
-    plot2 = plt.subplot(212)
-    ax = plt.gca()
-    ax.xaxis.set_major_formatter(xfmt)
-    plt.xticks(rotation=90)
-    plot2.plot(x, y2, '.-')
-    plt.ylabel('Response Time (ms)')
-    plt.xlabel('timestamp')
-    plot1.set_xticklabels([])
-    plot1.get_shared_x_axes().join(plot1, plot2)
-
-    plt.autoscale()
-    plt.show()
+    packageloss, reponsetime, timestamp = zip(*data)
+    return {'packageloss': np.array(packageloss),
+            'responsetime': np.array(reponsetime),
+            'timestamp': np.array([datetime.fromtimestamp(x) for x in timestamp])}
 
 
 if __name__ == '__main__':
-    vals = get_values()
-    time = vals[1]
+    df = pd.DataFrame(data=get_values())
+    if __name__ == '__main__':
+        chart_rt = alt.Chart(df, width=1000, height=500).mark_line().encode(
+            x='timestamp:T',
+            y='responsetime:Q',
+            tooltip=['timestamp:T']
+        ).properties(
+            title=""
+        ).interactive()
 
-    dates = [datetime.datetime.fromtimestamp(ts) for ts in vals[1]]
-    datenums = md.date2num(dates)
-    first_date = datetime.datetime.fromtimestamp(time[0])
-    last_date = datetime.datetime.fromtimestamp(time[-1:])
-    plot(x=datenums, y1=vals[0][0], y2=vals[0][1],
-         title='Beehive Network\nFrom {}     to     {}'.format(first_date, last_date))
+    chart_pl = alt.Chart(df, width=1000, height=500).mark_line().encode(
+        x='timestamp:T',
+        y='packageloss:Q',
+        tooltip=['timestamp:T']
+    ).interactive()
+
+    basename = os.path.splitext(sys.argv[1])[0]
+    chart_pl.save("{}_packageloss.html".format(basename))
+    chart_rt.save("{}_responsetime.html".format(basename))
